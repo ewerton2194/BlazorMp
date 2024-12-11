@@ -1,0 +1,93 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="obj\Debug\net8.0\.NETCoreApp,Version=v8.0.AssemblyAttributes.cs" />
+    <Compile Include="obj\Debug\net8.0\BlazorMp.AssemblyInfo.cs" />
+    <Compile Include="obj\Debug\net8.0\BlazorMp.GlobalUsings.g.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="bin\Debug\net8.0\appsettings.Development.json" />
+    <Content Include="bin\Debug\net8.0\appsettings.json" />
+    <Content Include="bin\Debug\net8.0\BlazorMp.deps.json" />
+    <Content Include="bin\Debug\net8.0\BlazorMp.runtimeconfig.json" />
+    <Content Include="bin\Debug\net8.0\BlazorMp.staticwebassets.endpoints.json" />
+    <Content Include="bin\Debug\net8.0\BlazorMp.staticwebassets.runtime.json" />
+    <Content Include="obj\BlazorMp.csproj.nuget.dgspec.json" />
+    <Content Include="obj\Debug\net8.0\ApiEndpoints.json" />
+    <Content Include="obj\Debug\net8.0\BlazorMp.csproj.FileListAbsolute.txt" />
+    <Content Include="obj\Debug\net8.0\scopedcss\bundle\BlazorMp.styles.css" />
+    <Content Include="obj\Debug\net8.0\scopedcss\Components\Layout\MainLayout.razor.rz.scp.css" />
+    <Content Include="obj\Debug\net8.0\scopedcss\Components\Layout\NavMenu.razor.rz.scp.css" />
+    <Content Include="obj\Debug\net8.0\scopedcss\Components\Pages\Caixa.razor.rz.scp.css" />
+    <Content Include="obj\Debug\net8.0\scopedcss\Components\Pages\EnderecoDestinatario.razor.rz.scp.css" />
+    <Content Include="obj\Debug\net8.0\scopedcss\Components\Pages\EnderecoRemetente.razor.rz.scp.css" />
+    <Content Include="obj\Debug\net8.0\scopedcss\Components\Pages\Envelope.razor.rz.scp.css" />
+    <Content Include="obj\Debug\net8.0\scopedcss\Components\Pages\FinalizaPost.razor.rz.scp.css" />
+    <Content Include="obj\Debug\net8.0\scopedcss\Components\Pages\Impressaorazor.razor.rz.scp.css" />
+    <Content Include="obj\Debug\net8.0\scopedcss\Components\Pages\Index.razor.rz.scp.css" />
+    <Content Include="obj\Debug\net8.0\scopedcss\Components\Pages\Login.razor.rz.scp.css" />
+    <Content Include="obj\Debug\net8.0\scopedcss\Components\Pages\Orcamento.razor.rz.scp.css" />
+    <Content Include="obj\Debug\net8.0\scopedcss\Components\Pages\SelecionaP.razor.rz.scp.css" />
+    <Content Include="obj\Debug\net8.0\scopedcss\projectbundle\BlazorMp.bundle.scp.css" />
+    <Content Include="obj\Debug\net8.0\staticwebassets.build.endpoints.json" />
+    <Content Include="obj\Debug\net8.0\staticwebassets.build.json" />
+    <Content Include="obj\Debug\net8.0\staticwebassets.development.json" />
+    <Content Include="obj\Debug\net8.0\staticwebassets.pack.json" />
+    <Content Include="obj\Debug\net8.0\staticwebassets.references.upToDateCheck.txt" />
+    <Content Include="obj\Debug\net8.0\staticwebassets.removed.txt" />
+    <Content Include="obj\Debug\net8.0\staticwebassets.upToDateCheck.txt" />
+    <Content Include="obj\project.assets.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="bin\Release\net8.0\" />
+    <Folder Include="wwwroot\imagens\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="bin\Debug\net8.0\Blazored.LocalStorage.dll" />
+    <None Include="bin\Debug\net8.0\BlazorMaskedFields.dll" />
+    <None Include="bin\Debug\net8.0\BlazorMp.dll" />
+    <None Include="bin\Debug\net8.0\BlazorMp.exe" />
+    <None Include="bin\Debug\net8.0\BlazorMp.pdb" />
+    <None Include="bin\Debug\net8.0\Mask.dll" />
+    <None Include="bin\Debug\net8.0\Newtonsoft.Json.dll" />
+    <None Include="obj\BlazorMp.csproj.nuget.g.props" />
+    <None Include="obj\BlazorMp.csproj.nuget.g.targets" />
+    <None Include="obj\Debug\net8.0\apphost.exe" />
+    <None Include="obj\Debug\net8.0\BlazorMp.AssemblyInfoInputs.cache" />
+    <None Include="obj\Debug\net8.0\BlazorMp.assets.cache" />
+    <None Include="obj\Debug\net8.0\BlazorMp.csproj.AssemblyReference.cache" />
+    <None Include="obj\Debug\net8.0\BlazorMp.csproj.BuildWithSkipAnalyzers" />
+    <None Include="obj\Debug\net8.0\BlazorMp.csproj.CoreCompileInputs.cache" />
+    <None Include="obj\Debug\net8.0\BlazorMp.csproj.Up2Date" />
+    <None Include="obj\Debug\net8.0\BlazorMp.dll" />
+    <None Include="obj\Debug\net8.0\BlazorMp.GeneratedMSBuildEditorConfig.editorconfig" />
+    <None Include="obj\Debug\net8.0\BlazorMp.genruntimeconfig.cache" />
+    <None Include="obj\Debug\net8.0\BlazorMp.MvcApplicationPartsAssemblyInfo.cache" />
+    <None Include="obj\Debug\net8.0\BlazorMp.pdb" />
+    <None Include="obj\Debug\net8.0\refint\BlazorMp.dll" />
+    <None Include="obj\Debug\net8.0\ref\BlazorMp.dll" />
+    <None Include="obj\Debug\net8.0\staticwebassets\msbuild.BlazorMp.Microsoft.AspNetCore.StaticWebAssetEndpoints.props" />
+    <None Include="obj\Debug\net8.0\staticwebassets\msbuild.BlazorMp.Microsoft.AspNetCore.StaticWebAssets.props" />
+    <None Include="obj\Debug\net8.0\staticwebassets\msbuild.build.BlazorMp.props" />
+    <None Include="obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.BlazorMp.props" />
+    <None Include="obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.BlazorMp.props" />
+    <None Include="obj\project.nuget.cache" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
+    <PackageReference Include="BlazorMaskedFields" Version="1.0.7" />
+    <PackageReference Include="Mask" Version="1.1.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+</Project>

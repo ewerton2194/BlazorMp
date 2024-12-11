@@ -1,0 +1,63 @@
+﻿@page "/FinalizaPost"
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+@inject NavigationManager NavigationManager
+@inject CepService CepService
+@rendermode InteractiveServer
+@inject ProtectedSessionStorage ProtectedSessionStorage
+
+<PageTitle>Finaliza Postagem</PageTitle>
+
+@if (postagem != null)
+{
+    <p><strong>Cep Destinatário:</strong> @postagem.CepDestinatario</p>
+    <p><strong>Tipo de Embalagem:</strong> @postagem.TipoEmbalagem</p>
+    <p><strong>Altura:</strong> @postagem.Altura cm</p>
+    <p><strong>Largura:</strong> @postagem.Largura cm</p>
+    <p><strong>Comprimento:</strong> @postagem.Comprimento cm</p>
+    <p><strong>Diâmetro:</strong> @postagem.Diametro cm</p>
+    <p><strong>Peso:</strong> @postagem.Peso kg</p>
+    <p><strong>Código de Serviço:</strong> @postagem.CodigoServico</p>
+    <p><strong>Valor Declarado:</strong> R$ @postagem.ValorDeclarado</p>
+    <p><strong>Prazo de Entrega:</strong> @postagem.PrazoEntrega dias</p>
+    <p><strong>Nome do Remetente:</strong> @postagem.NomeRemetente</p>
+    <p><strong>Cep do Remetente:</strong> @postagem.CepRemetente</p>
+    <p><strong>Endereço do Remetente:</strong> @postagem.EnderecoRemetente, @postagem.NumeroRemetente, @postagem.ComplementoRemetente</p>
+    <p><strong>Bairro do Remetente:</strong> @postagem.BairroRemetente</p>
+    <p><strong>Cidade do Remetente:</strong> @postagem.CidadeRemetente - @postagem.UfRemetente</p>
+    <p><strong>Email do Remetente:</strong> @postagem.EmailRemetente</p>
+    <p><strong>CPF/CNPJ do Remetente:</strong> @postagem.CpfCnpjRemetente</p>
+    <p><strong>Nome do Destinatário:</strong> @postagem.NomeDestinatario</p>
+    <p><strong>Endereço do Destinatário:</strong> @postagem.EnderecoDestinatario, @postagem.NumeroDestinatario, @postagem.ComplementoDestinatario</p>
+    <p><strong>Bairro do Destinatário:</strong> @postagem.BairroDestinatario</p>
+    <p><strong>Cidade do Destinatário:</strong> @postagem.CidadeDestinatario - @postagem.UfDestinatario</p>
+    <p><strong>Email do Destinatário:</strong> @postagem.EmailDestinatario</p>
+    <p><strong>CPF/CNPJ do Destinatário:</strong> @postagem.CpfCnpjDestinatario</p>
+    <p><strong>Pedido:</strong> @postagem.Pedido</p>
+    <p><strong>Nota Fiscal:</strong> @postagem.NotaFiscal</p>
+    <p><strong>Endereço do Vizinho:</strong> @postagem.EnderecoVizinho</p>
+}
+else
+{
+    <p>Carregando dados da postagem...</p>
+}
+
+@code {
+    public PostagemService1 postagem;
+    private bool dadosCarregados = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && !dadosCarregados)
+        {
+            postagem = await ObterDadosCepPostagem();
+            dadosCarregados = true;
+            StateHasChanged(); // Re-renderiza o componente com os dados carregados
+        }
+    }
+
+    public async Task<PostagemService1> ObterDadosCepPostagem()
+    {
+        var result = await ProtectedSessionStorage.GetAsync<PostagemService1>("Postagem");
+        return result.Success ? result.Value : new PostagemService1();
+    }
+}

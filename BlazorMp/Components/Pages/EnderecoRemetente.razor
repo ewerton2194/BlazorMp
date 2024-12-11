@@ -1,0 +1,181 @@
+﻿@page "/EnderecoRemetente{idServico:int}"
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+@inject NavigationManager NavigationManager
+@inject CepService CepService
+@rendermode InteractiveServer
+@inject ProtectedSessionStorage ProtectedSessionStorage
+
+<PageTitle>Endereço do Remetente</PageTitle>
+
+<header>
+    <nav class="header-nav">
+        <img class="Logo" src="/imagens/logo.png" alt="Alternate Text" />
+        <ul>
+            <li><a href="http://www.centraldeenvios.com.br/Login.aspx"> Home </a></li>
+            <li><a href="http://novo.micropost.com.br/#contato"> Contato</a> </li>
+        </ul>
+    </nav>
+</header>
+
+<div>
+    <div class="Img-Container">
+        <img class="Img-nav" src="/imagens/plano_fundo.png" alt="" />
+
+        <div class="Card">
+            <h1 class="Title">Digite os dados do Remetente</h1>
+
+            <EditForm Model="@remetenteModel" OnValidSubmit="SubmeterFormulario">
+                <DataAnnotationsValidator />
+
+                <!-- Campos do formulário -->
+
+                <div class="form-group-row">
+                    <div class="form-group">
+                        <label for="Remetente">Remetente</label>
+                        <InputText id="Remetente" class="form-control" @bind-Value="remetenteModel.Remetente" />
+                        <ValidationMessage For="@(() => remetenteModel.Remetente)" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="CEP">CEP</label>
+                        <InputText id="CEP" class="form-control" @bind-Value="remetenteModel.CEPRementente" @onblur="BuscarEnderecoPorCep" />
+                        <ValidationMessage For="@(() => remetenteModel.CEPRementente)" />
+                    </div>
+                </div>
+
+                <div class="form-group-row">
+                    <div class="form-group">
+                        <label for="Endereco">Endereço</label>
+                        <InputText id="Endereco" class="form-control" @bind-Value="remetenteModel.EnderecoRemetente" />
+                        <ValidationMessage For="@(() => remetenteModel.EnderecoRemetente)" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Numero">Número</label>
+                        <InputText id="Numero" class="form-control" @bind-Value="remetenteModel.NumeroRemetente" />
+                        <ValidationMessage For="@(() => remetenteModel.NumeroRemetente)" />
+                    </div>
+                </div>
+
+                <div class="form-group-row">
+                    <div class="form-group">
+                        <label for="Complemento">Complemento</label>
+                        <InputText id="Complemento" class="form-control" @bind-Value="remetenteModel.ComplementoRemetente" />
+                        <ValidationMessage For="@(() => remetenteModel.ComplementoRemetente)" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Bairro">Bairro</label>
+                        <InputText id="Bairro" class="form-control" @bind-Value="remetenteModel.BairroRemetente" />
+                        <ValidationMessage For="@(() => remetenteModel.BairroRemetente)" />
+                    </div>
+                </div>
+
+                <div class="form-group-row">
+                    <div class="form-group">
+                        <label for="Cidade">Cidade</label>
+                        <InputText id="Cidade" class="form-control" @bind-Value="remetenteModel.CidadeRemetente" disabled />
+                        <ValidationMessage For="@(() => remetenteModel.CidadeRemetente)" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="UF">UF</label>
+                        <InputText id="UF" class="form-control" @bind-Value="remetenteModel.UFRemetente" disabled />
+                        <ValidationMessage For="@(() => remetenteModel.UFRemetente)" />
+                    </div>
+                </div>
+
+                <div class="form-group-row">
+                    <div class="form-group">
+                        <label for="Email">E-mail</label>
+                        <InputText id="Email" class="form-control" @bind-Value="remetenteModel.EmailRemetente" />
+                        <ValidationMessage For="@(() => remetenteModel.EmailRemetente)" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="CpfCnpj">CPF/CNPJ</label>
+                        <InputText id="CpfCnpj" class="form-control" @bind-Value="remetenteModel.CpfCnpjRemetente" />
+                        <ValidationMessage For="@(() => remetenteModel.CpfCnpjRemetente)" />
+                    </div>
+                </div>
+
+                <div class="Button-Container">
+                    <button class="Button-V" type="button" @onclick="Voltar">Voltar</button>
+                    <button class="Button" type="submit">Enviar</button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+@code {
+    private RemetenteModel remetenteModel = new RemetenteModel();
+    public PostagemService1 postagem;
+    private TipoServico servicoSelecionado;
+
+    [Parameter] public int idServico { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Carregar os dados de PostagemService1 apenas após a renderização inicial
+            var result = await ProtectedSessionStorage.GetAsync<PostagemService1>("Postagem");
+            postagem = result.Success && result.Value != null ? result.Value : new PostagemService1();
+
+            StateHasChanged(); // Atualiza o componente após carregar os dados
+        }
+    }
+
+    private async Task BuscarEnderecoPorCep()
+    {
+        if (!string.IsNullOrEmpty(remetenteModel.CEPRementente))
+        {
+            try
+            {
+                var endereco = await CepService.BuscarEnderecoPorCepAsync(remetenteModel.CEPRementente.Replace("-", ""));
+                if (endereco != null)
+                {
+                    remetenteModel.EnderecoRemetente = endereco.Logradouro;
+                    remetenteModel.BairroRemetente = endereco.Bairro;
+                    remetenteModel.CidadeRemetente = endereco.Localidade;
+                    remetenteModel.UFRemetente = endereco.Uf;
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine($"Erro ao buscar CEP: {ex.Message}");
+            }
+        }
+    }
+
+    private async Task SubmeterFormulario()
+    {
+        // Carregar a postagem do ProtectedSessionStorage
+        var result = await ProtectedSessionStorage.GetAsync<PostagemService1>("Postagem");
+        postagem = result.Value;
+
+        // Atualizar os dados do remetente na postagem
+        postagem.NomeRemetente = remetenteModel.Remetente;
+        postagem.CepRemetente = remetenteModel.CEPRementente;
+        postagem.EnderecoRemetente = remetenteModel.EnderecoRemetente;
+        postagem.NumeroRemetente = remetenteModel.NumeroRemetente;
+        postagem.ComplementoRemetente = remetenteModel.ComplementoRemetente;
+        postagem.BairroRemetente = remetenteModel.BairroRemetente;
+        postagem.CidadeRemetente = remetenteModel.CidadeRemetente;
+        postagem.UfRemetente = remetenteModel.UFRemetente;
+        postagem.EmailRemetente = remetenteModel.EmailRemetente;
+        postagem.CpfCnpjRemetente = remetenteModel.CpfCnpjRemetente;
+
+        // Salvar a postagem atualizada no ProtectedSessionStorage
+        await ProtectedSessionStorage.SetAsync("Postagem", postagem);
+
+        // Navegar para a próxima página
+        NavigationManager.NavigateTo("/EnderecoDestinatario");
+    }
+
+    private void Voltar()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+}

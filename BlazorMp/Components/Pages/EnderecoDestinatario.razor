@@ -1,0 +1,179 @@
+﻿@page "/EnderecoDestinatario"
+@rendermode InteractiveServer
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+@inject NavigationManager NavigationManager
+@inject CepService CepService
+@inject ProtectedSessionStorage ProtectedSessionStorage
+
+<PageTitle>Endereço do Destinatario</PageTitle>
+
+<header>
+    <nav class="header-nav">
+        <img class="Logo" src="/imagens/logo.png" alt="Logo" />
+        <ul>
+            <li><a href="http://www.centraldeenvios.com.br/Login.aspx"> Home </a></li>
+            <li><a href="http://novo.micropost.com.br/#contato"> Contato</a> </li>
+        </ul>
+    </nav>
+</header>
+
+<div>
+    <div class="Img-Container">
+        <img class="Img-nav" src="/imagens/plano_fundo.png" alt="Background Image" />
+
+        <div class="Card">
+            <h1 class="Title">Digite os dados do Destinatario</h1>
+
+            <EditForm Model="@destinatarioModel" OnValidSubmit="SubmeterFormulario">
+                <DataAnnotationsValidator />
+
+                <div class="form-group-row">
+                    <div class="form-group">
+                        <label for="Destinatario">Destinatario</label>
+                        <InputText id="Destinatario" class="form-control" @bind-Value="destinatarioModel.Destinatario" />
+                        <ValidationMessage For="@(() => destinatarioModel.Destinatario)" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="CEP">CEP</label>
+                        <InputText id="CEP" class="form-control" @bind-Value="destinatarioModel.CEP" disabled />
+                        <ValidationMessage For="@(() => destinatarioModel.CEP)" />
+                    </div>
+                </div>
+
+                <div class="form-group-row">
+                    <div class="form-group">
+                        <label for="Endereco">Endereço</label>
+                        <InputText id="Endereco" class="form-control" @bind-Value="destinatarioModel.Endereco" />
+                        <ValidationMessage For="@(() => destinatarioModel.Endereco)" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Numero">Número</label>
+                        <InputText id="Numero" class="form-control" @bind-Value="destinatarioModel.Numero" />
+                        <ValidationMessage For="@(() => destinatarioModel.Numero)" />
+                    </div>
+                </div>
+
+                <div class="form-group-row">
+                    <div class="form-group">
+                        <label for="Complemento">Complemento</label>
+                        <InputText id="Complemento" class="form-control" @bind-Value="destinatarioModel.Complemento" />
+                        <ValidationMessage For="@(() => destinatarioModel.Complemento)" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Bairro">Bairro</label>
+                        <InputText id="Bairro" class="form-control" @bind-Value="destinatarioModel.Bairro" />
+                        <ValidationMessage For="@(() => destinatarioModel.Bairro)" />
+                    </div>
+                </div>
+
+                <div class="form-group-row">
+                    <div class="form-group">
+                        <label for="Cidade">Cidade</label>
+                        <InputText id="Cidade" class="form-control" @bind-Value="destinatarioModel.Cidade" disabled />
+                        <ValidationMessage For="@(() => destinatarioModel.Cidade)" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="UF">UF</label>
+                        <InputText id="UF" class="form-control" @bind-Value="destinatarioModel.UF" disabled />
+                        <ValidationMessage For="@(() => destinatarioModel.UF)" />
+                    </div>
+                    <div class="form-group">
+                        <label for="CpfCnpj">CPF/CNPJ</label>
+                        <InputText id="CpfCnpj" class="form-control" @bind-Value="destinatarioModel.CpfCnpj" />
+                        <ValidationMessage For="@(() => destinatarioModel.CpfCnpj)" />
+                    </div>
+                </div>
+
+                <div class="form-group-row">
+                    <div class="form-group">
+                        <label for="Email">E-mail</label>
+                        <InputText id="Email" class="form-control" @bind-Value="destinatarioModel.Email" />
+                        <ValidationMessage For="@(() => destinatarioModel.Email)" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Pedido">Pedido</label>
+                        <InputText id="Pedido" class="form-control" @bind-Value="destinatarioModel.Pedido" />
+                        <ValidationMessage For="@(() => destinatarioModel.Pedido)" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="NF">Nota Fiscal</label>
+                        <InputText id="NF" class="form-control" @bind-Value="destinatarioModel.NotaFiscal" />
+                        <ValidationMessage For="@(() => destinatarioModel.NotaFiscal)" />
+                    </div>
+                </div>
+
+                <div class="Button-Container">
+                    <button class="Button-V" type="button" @onclick="Voltar">Voltar</button>
+                    <button class="Button" type="submit">Finalizar</button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+@code {
+    private DestinatarioModel destinatarioModel = new DestinatarioModel();
+    private PostagemService1 postagem;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            postagem = await ObterDadosCepPostagem();
+            PreencherFormulario(postagem);
+            StateHasChanged();
+        }
+    }
+
+    private async Task<PostagemService1> ObterDadosCepPostagem()
+    {
+        var result = await ProtectedSessionStorage.GetAsync<PostagemService1>("Postagem");
+        return result.Value;
+    }
+
+    private async Task SubmeterFormulario()
+    {
+        postagem.NomeDestinatario = destinatarioModel.Destinatario;
+        postagem.CepDestinatario = destinatarioModel.CEP;
+        postagem.EnderecoDestinatario = destinatarioModel.Endereco;
+        postagem.NumeroDestinatario = destinatarioModel.Numero;
+        postagem.ComplementoDestinatario = destinatarioModel.Complemento;
+        postagem.BairroDestinatario = destinatarioModel.Bairro;
+        postagem.CidadeDestinatario = destinatarioModel.Cidade;
+        postagem.UfDestinatario = destinatarioModel.UF;
+        postagem.EmailDestinatario = destinatarioModel.Email;
+        postagem.CpfCnpjDestinatario = destinatarioModel.CpfCnpj;
+        postagem.Pedido = destinatarioModel.Pedido;
+        postagem.NotaFiscal = destinatarioModel.NotaFiscal;
+
+        await ProtectedSessionStorage.SetAsync("Postagem", postagem);
+        NavigationManager.NavigateTo("/Impressaorazor");
+    }
+
+    private void Voltar()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+
+    private void PreencherFormulario(PostagemService1 postagem)
+    {
+        if (postagem != null)
+        {
+            destinatarioModel.CEP = postagem.CepDestinatario;
+            destinatarioModel.Endereco = postagem.EnderecoDestinatario;
+            destinatarioModel.Bairro = postagem.BairroDestinatario;
+            destinatarioModel.Cidade = postagem.CidadeDestinatario;
+            destinatarioModel.UF = postagem.UfDestinatario;
+            destinatarioModel.Email = postagem.EmailDestinatario;
+            destinatarioModel.CpfCnpj = postagem.CpfCnpjDestinatario;
+            destinatarioModel.Pedido = postagem.Pedido;
+            destinatarioModel.NotaFiscal = postagem.NotaFiscal;
+        }
+    }
+}

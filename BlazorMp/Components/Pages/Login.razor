@@ -1,0 +1,100 @@
+﻿@page "/"
+@rendermode InteractiveServer
+@inject NavigationManager Navigation
+@inject HttpClient Http
+
+<PageTitle>Login</PageTitle>
+
+<header>
+    <nav class="header-nav">
+        <img class="Logo" src="/imagens/logo.png" alt="Logo Central de Envios" />
+        <ul>
+            <li><a href="http://www.centraldeenvios.com.br/Login.aspx">Home</a></li>
+            <li><a href="http://novo.micropost.com.br/#contato">Contato</a></li>
+        </ul>
+    </nav>
+</header>
+
+<div class="Img-Container">
+    <img class="Img-nav" src="/imagens/plano_fundo.png" alt="" />
+
+    <!-- Adiciona um atributo FormName ao EditForm -->
+    <EditForm Model="@loginModel" OnValidSubmit="LoginValido" FormName="LoginForm">
+        <DataAnnotationsValidator />
+        <div class="Form">
+            <h1 class="Title">EFETUE LOGIN</h1>
+
+            <label>Digite seu e-mail</label>
+            <InputText @bind-Value="loginModel.Email" class="Usu" />
+            <ValidationMessage For="@(() => loginModel.Email)" />
+            <br />
+
+            <label>Digite sua senha</label>
+            <InputText @bind-Value="loginModel.Senha" type="password" class="Senha" />
+            <ValidationMessage For="@(() => loginModel.Senha)" />
+            <br />
+
+            <a href="#" class="Esq_login">Esqueci minha senha</a>
+            <br />
+
+            <button type="submit" class="Button">Acessar Conta</button>
+        </div>
+    </EditForm>
+    @if (!string.IsNullOrEmpty(MensagemErro))
+    {
+        <div class="Erro">@MensagemErro</div>
+    }
+</div>
+
+<footer>
+    <div class="Footer">
+        <p>
+            Seja bem-vindo ao Central de Envios! Estamos aqui para facilitar a sua experiência de envio de pacotes e documentos...
+        </p>
+    </div>
+</footer>
+
+@code {
+    private LoginModel loginModel = new LoginModel();
+    public string MensagemErro { get; set; }
+
+    private async Task LoginValido()
+    {
+        try
+        {
+            // Inclua o nome do formulário na solicitação
+            var requestPayload = new
+            {
+                // FormName = "LoginForm",
+                UserID = loginModel.Email,
+                AccessKey = loginModel.Senha
+            };
+
+            // Envia a solicitação de login para a API com o FormName
+            var response = await Http.PostAsJsonAsync("https://centraldeenviosapi.azurewebsites.net/api/Login", requestPayload);
+
+            if (response.IsSuccessStatusCode)
+            {
+                ///var result = await response.Content.ReadFromJsonAsync<Object>();
+                var result = await response.Content.ReadFromJsonAsync<LoginResponse>();
+                if (result != null && !string.IsNullOrEmpty(result.accessToken))
+                {
+                    // Redireciona para a página inicial se o login for bem-sucedido
+                    Navigation.NavigateTo("/Index");
+                }
+                else
+                {
+                    MensagemErro = "Falha ao obter o token, tente novamente.";
+                }
+            }
+            else
+            {
+                MensagemErro = "Usuário ou senha inválidos";
+            }
+        }
+        catch (Exception)
+        {
+            MensagemErro = "Falha ao conectar com o servidor";
+        }
+    }
+}

@@ -1,0 +1,48 @@
+﻿@page "/Caixa"
+@rendermode InteractiveServer
+
+<PageTitle>Caixa</PageTitle>
+
+
+<div class="Img-Container">
+    <img class="Img-nav" src="imagens/Img-fundo.png" alt="Alternate Text" />
+
+    <h1 class="Title">CAIXA</h1>
+
+    <div class="Form">   
+        <EditForm Model="@this" OnValidSubmit="MedidasOk">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <div class="Input-Form"> 
+                <label>Altura (cm):</label>
+                <InputNumber @bind-Value="Altura" class="Input" />
+
+                <label>Largura (cm):</label>
+                <InputNumber @bind-Value="Largura" class="Input" />
+
+                <label>Comprimento (cm):</label>
+                <InputNumber @bind-Value="Comprimento" class="Input" />
+
+                <label>Peso (kg):</label>
+                <InputNumber @bind-Value="Peso" class="Input" />
+
+                
+
+                <button class="Button" type="submit">Continuar</button>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+
+    [Inject]
+    private NavigationManager Navigation { get; set; }
+
+
+    public void MedidasOk(){
+        Navigation.NavigateTo("");
+        }   
+   }
+
+  

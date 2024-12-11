@@ -1,0 +1,382 @@
+﻿@page "/SelecionaP"
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+@inject ProtectedSessionStorage ProtectedSessionStorage
+@using System.Net.Http.Json
+@inject HttpClient HttpClient
+@using System.Text.Json.Serialization
+@using System.Runtime.Serialization.Json
+@using Newtonsoft.Json
+
+
+
+
+
+<PageTitle>Seleciona postagem</PageTitle>
+<header>
+    <nav class="header-nav">
+        <img class="Logo" src="/imagens/logo.png" alt="Alternate Text" />
+        <ul>
+            <li><a href="http://www.centraldeenvios.com.br/Login.aspx"> Home </a></li>
+            <li><a href="http://novo.micropost.com.br/#contato"> Contato</a> </li>
+        </ul>
+    </nav>
+</header>
+
+<!--Titulo e subtitulo-->
+<div class="Img-Container">
+    <img class="Img-nav" src="/imagens/plano_fundo.png" alt="" />
+
+    <h1 class="Title">Escolha o modelo de embalagem que melhor se adequa ao seu envio</h1>
+
+    <!--Exibir cards -->
+    <div class="Card-Container">
+        @foreach (var embalagem in tpEmbalagens)
+        {
+            <div class="Card @(embalagemSelecionada == embalagem.Id ? "Card-selected" : "")">
+                <h2>@embalagem.Nome</h2>
+                <p>@embalagem.Descricao</p>
+                <button class="Button" @onclick="() => SelecionarEmbalagem(embalagem.Id)">Selecionar</button>
+            </div>
+        }
+    </div>
+
+    <!-- Exibir campos apenas se uma embalagem for selecionada -->
+    @if (embalagemSelecionada != -1)
+    {
+        <div>
+            <EditForm Model="formModel" OnValidSubmit="SubmeterFormulario">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+
+                <div class="Form-Container">
+
+                    @if (embalagemSelecionada == 002)
+                    {
+                        <div>
+                            <label for="modeloCaixa"><strong> Escolha um modelo de caixa:</strong></label>
+                            <select id="modeloCaixa" @onchange="OnModeloChange">
+                                <option value="-1">Outros (Digite as dimensões)</option>
+                                @foreach (var modelo in modelosCaixas)
+                                {
+                                    <option value="@modelo.Id">@modelo.Nome</option>
+                                }
+                            </select>
+                        </div>
+                        <br />
+
+                        <InputNumber @bind-Value="formModel.Altura" class="Rounded-Input" placeholder="Altura em CM"
+                                     disabled="@((modeloSelecionado != -1) && (modeloSelecionado >= 0))"
+                                     style="@(formModel.Altura.HasValue ? EstiloPreenchido : null)"
+                                     @oninput="CalcularPesoCubico" />
+                        <label> <strong>X</strong></label>
+                        <ValidationMessage For="() => formModel.Altura" />
+
+
+                        <InputNumber @bind-Value="formModel.Largura" class="Rounded-Input" placeholder="Largura em CM"
+                                     style="@(formModel.Largura.HasValue ? EstiloPreenchido : null)"
+                                     disabled="@((modeloSelecionado != -1) && (modeloSelecionado >= 0))"
+                                     @oninput="CalcularPesoCubico" />
+                        <label> <strong>X</strong></label>
+                        <ValidationMessage For="() => formModel.Largura" />
+
+                        <InputNumber @bind-Value="formModel.Comprimento" class="Rounded-Input" placeholder="Comprimento em CM"
+                                     style="@(formModel.Comprimento.HasValue ? EstiloPreenchido : null)"
+                                     disabled="@((modeloSelecionado != -1) && (modeloSelecionado >= 0))"
+                                     @oninput="CalcularPesoCubico" />
+                        
+                        <ValidationMessage For="() => formModel.Comprimento" />
+
+                        @if (pesoCubico.HasValue) // Exibir peso cúbico calculado
+                        {
+                            <p><strong>Peso Cúbico Calculado:</strong> @pesoCubico.Value.ToString("F3") kg</p>
+                        }
+                        else // Mensagem se não for possível calcular
+                        {
+                            <p><strong>Peso Cúbico:</strong> Insira as dimensões para calcular</p>
+                        }
+
+
+                    }
+                    @if (embalagemSelecionada == 001) // Envelope
+                    {
+                        <InputNumber @bind-Value="formModel.Largura" class="Rounded-Input" placeholder="Largura em CM"
+                                     style="@(formModel.Largura.HasValue ? EstiloPreenchido : null)" />
+                        <label> <strong>X</strong></label>
+                        <ValidationMessage For="() => formModel.Largura" />
+
+                        <InputNumber @bind-Value="formModel.Comprimento" class="Rounded-Input" placeholder="Comprimento em CM"
+                                     style="@(formModel.Comprimento.HasValue ? EstiloPreenchido : null)" />
+                        
+                        <ValidationMessage For="() => formModel.Comprimento" />
+                            <br />
+                    }
+
+                    @if (embalagemSelecionada == 003) // Cilindro
+                    {
+                        <InputNumber @bind-Value="formModel.Comprimento" class="Rounded-Input" placeholder="Comprimento em CM"
+                                     style="@(formModel.Comprimento.HasValue ? EstiloPreenchido : null)" />
+                        <label> <strong>X</strong></label>
+                        <ValidationMessage For="() => formModel.Comprimento" />
+
+                        <InputNumber @bind-Value="formModel.Diametro" class="Rounded-Input" placeholder="Diâmetro em CM"
+                                     style="@(formModel.Diametro.HasValue ? EstiloPreenchido : null)" />
+                        
+                        <ValidationMessage For="() => formModel.Diametro" />
+                            <br />
+                    }
+
+                 
+
+                 
+
+                    <label><strong>Digite o peso em gramas </strong></label>
+                    <InputNumber @bind-Value="formModel.Peso" class="Rounded-Input" placeholder=""
+                                 style="@(formModel.Peso.HasValue ? EstiloPreenchido : null)" />
+                    <ValidationMessage For="() => formModel.Peso" />
+
+                 
+                        <br />
+
+                    <div class="Form-field">
+                        <InputCheckbox id="AvisoRecebimento" @bind-Value="formModel.AvisoRecebimento" />
+                        <label for="AvisoRecebimento"><strong>Aviso de Recebimento (AR) - R$ 7,75</strong> </label>
+                    </div>
+
+                    <div class="Form-field">
+                        <InputCheckbox id="MaoPropria" @bind-Value="formModel.MaoPropria" />
+                        <label for="MaoPropria"><strong>Mão Própria - R$ 9,45</strong> </label>
+                    </div>
+
+                    <div class="Form-field">
+                        <InputCheckbox id="ProdutoControlado" @bind-Value="formModel.ProdutoControlado" />
+                        <label for="ProdutoControlado"><strong>Produto Controlado - R$ 35,00</strong> </label>
+                    </div>
+
+                    <div class="Form-field">
+                        <label for="ValorDeclarado"><strong>Valor Declarado</strong></label>
+                        <InputNumber id="ValorDeclarado" @bind-Value="formModel.ValorDeclarado" class="form-control" @oninput="ValidarValorDeclarado" />
+                        <ValidationMessage For="() => formModel.ValorDeclarado" />
+
+                        @if (valorDeclaradoInvalido)
+                        {
+                            <p class="error-message">O valor declarado deve ser igual a 0 ou maior que R$ 24,50.</p>
+                        }
+                    </div>
+
+
+
+                </div>
+
+
+
+                <div class="Button-Container">
+                    <button class="Button Voltar"><a href="/">Voltar</a></button>
+                    <button class="Button Continuar" type="submit" disabled="@valorDeclaradoInvalido">Continuar</button>
+
+                </div>
+            </EditForm>
+        </div>
+    }
+</div>
+
+@code {
+    private int embalagemSelecionada = -1;
+    private int modeloSelecionado = -1; // Para controlar o modelo da caixa selecionada
+    private double? pesoCubico;
+    public PostagemService1 postagem;
+    private FormModel formModel = new FormModel();
+    private bool valorDeclaradoInvalido = false;
+    private RetornoOrcamento retornoApi;
+    public List<RetornoOrcamento> Itens { get; set; } = new List<RetornoOrcamento>();
+    private string EstiloPreenchido => "background-color: #e0f7fa; border-color: #007bff;";
+
+
+
+
+    private int idCliente = 177268;
+    private int idDepto = 753779;
+
+
+    public List<TipoEmbalagem> tpEmbalagens = new List<TipoEmbalagem>
+    {
+        new TipoEmbalagem { Id = 2, Nome = "Caixa", UrlImagem = "", Descricao = "Ideal para itens maiores e mais pesados." },
+        new TipoEmbalagem { Id = 1, Nome = "Envelope", UrlImagem = "", Descricao = "Perfeito para documentos e itens pequenos." },
+        new TipoEmbalagem { Id = 3, Nome = "Cilindro", UrlImagem = "", Descricao = "Ótimo para itens de tamanho médio." }
+    };
+
+    public List<ModeloCaixa> modelosCaixas = new List<ModeloCaixa>
+    {
+        new ModeloCaixa { Id = 0, Nome = "Caixa Padrão 1", Altura = 9, Largura = 14, Comprimento = 18 },
+        new ModeloCaixa { Id = 1, Nome = "Caixa Padrão 2", Altura = 9, Largura = 23, Comprimento = 27 },
+        new ModeloCaixa { Id = 2, Nome = "Caixa Padrão 3", Altura = 14, Largura = 28, Comprimento = 36 },
+        new ModeloCaixa { Id = 3, Nome = "Caixa Padrão 4", Altura = 18, Largura = 27, Comprimento = 36 },
+        new ModeloCaixa { Id = 4, Nome = "Caixa Padrão 5", Altura = 27, Largura = 36, Comprimento = 54 },
+        new ModeloCaixa { Id = 5, Nome = "Caixa Padrão 6", Altura = 27, Largura = 27, Comprimento = 36 },
+        new ModeloCaixa { Id = 6, Nome = "Caixa Padrão 7", Altura = 4, Largura = 28, Comprimento = 36 }
+    };
+
+    public void SelecionarEmbalagem(int idEmbalagem)
+    {
+
+        {
+            embalagemSelecionada = idEmbalagem;
+            formModel.EmbalagemSelecionada = idEmbalagem;
+
+            // Redefine os campos relacionados
+            formModel.Altura = null;
+            formModel.Largura = null;
+            formModel.Comprimento = null;
+            formModel.Diametro = null;
+            formModel.Peso = null;
+            formModel.ValorDeclarado = null;
+            formModel.AvisoRecebimento = false;
+            formModel.MaoPropria = false;
+            formModel.ProdutoControlado = false;
+
+            modeloSelecionado = -1; // Resetar modelo selecionado se aplicável
+            pesoCubico = null;
+
+            // Redefine mensagens de validação e estados
+            valorDeclaradoInvalido = false;
+            StateHasChanged(); // Atualiza o estado do componente
+        }
+
+        CalcularPesoCubico();
+    }
+
+    private void OnModeloChange(ChangeEventArgs e)
+    {
+        modeloSelecionado = int.Parse(e.Value.ToString());
+
+        if (modeloSelecionado != -1)
+        {
+            var modelo = modelosCaixas.FirstOrDefault(m => m.Id == modeloSelecionado);
+            if (modelo != null)
+            {
+                formModel.Altura = modelo.Altura;
+                formModel.Largura = modelo.Largura;
+                formModel.Comprimento = modelo.Comprimento;
+            }
+        }
+        else
+        {
+            formModel.Altura = null;
+            formModel.Largura = null;
+            formModel.Comprimento = null;
+        }
+
+        CalcularPesoCubico();
+    }
+
+
+    private void CalcularPesoCubico()
+    {
+        if (formModel.Altura.HasValue && formModel.Largura.HasValue && formModel.Comprimento.HasValue)
+        {
+            pesoCubico = (formModel.Altura.Value * formModel.Largura.Value * formModel.Comprimento.Value) / 6000;
+        }
+        else
+        {
+            pesoCubico = null;
+        }
+    }
+
+    private void ValidarValorDeclarado()
+    {
+        valorDeclaradoInvalido = formModel.ValorDeclarado != 0 && formModel.ValorDeclarado < 24.50m;
+    }
+
+    private async Task EnviarOrcaWebS(PostagemService1 postagemCompleta)
+    {
+        var postagem = new OrcarPostagem(new PostagemService1
+            {
+                IdCliente = idCliente,
+                IdDepto = idDepto,
+                CepRemetente = "04469100",
+                CepDestinatario = postagemCompleta.CepDestinatario,
+                Peso = formModel.Peso ?? 0,
+                TipoEmbalagem = embalagemSelecionada,
+                ValorDeclarado = formModel.ValorDeclarado ?? 0m,
+                Altura = formModel.Altura?.ToString() ?? "0",
+                Largura = formModel.Largura?.ToString() ?? "0",
+                Comprimento = formModel.Comprimento?.ToString() ?? "0",
+                Diametro = formModel.Diametro?.ToString() ?? "0",
+                AvisoRecebimento = formModel.AvisoRecebimento,
+                MaoPropria = formModel.MaoPropria,
+                PostaRestante = formModel.PostaRestante,
+                ProdutoControlado = formModel.ProdutoControlado,
+            });
+
+        HttpClient.DefaultRequestHeaders.Authorization =
+            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6WyJTVVBFUlZJU09SQExPSkFURVNURS5DT00uQlIiLCJTVVBFUlZJU09SQExPSkFURVNURS5DT00uQlIiXSwianRpIjoiNTIwM2E3NTlmMWFiNGQ5ZGFiZGZkMjQ3NGU2ZDRmNDUiLCJpZEZpbGlhbCI6IjQzNjMiLCJpZFVzdWFyaW8iOiIyNDY4MiIsIm5iZiI6MTczMzkzODk5MywiZXhwIjoxNzM0MDI1MzkzLCJpYXQiOjE3MzM5Mzg5OTMsImlzcyI6IlNtYXJ0SXNzdWVyIiwiYXVkIjoiU21hcnRBdWRpZW5jZSJ9.tOtsow3nerqrpTEnKMNthVSoyOWQRIGKPUVN8PQzcRfFnnduRFDWGvwY7N_HV5rxJkCcVI2lFQRt_lP4nnOJGnMfP7JFy2P8b08evP3-GldS6yQg8h-i1QvMnmT32B0h0R_nNYIag0OtPeWQvLq1vGI3XvIcuF3Yj9hznPHXWsA9QM-fcwt-TzNqzkL711WamIqnVvTFtaZHQtuOtPAtnqgQm4aKtUYTFQsjJgu1WYfWdVfvkKP-c8KZU9LIM69KJnRSEg0HAWCZjDYLefdZyRzmj7QMi8Rwdf8LQoYjiUnO8AhSv_b_3O5_TKSwZQ6UWeC7--NTfl1WobB1l9gA6A");
+
+        var response = await HttpClient.PostAsJsonAsync("https://centraldeenviosapi.azurewebsites.net/api/Orcamento", postagem);
+
+        try
+        {
+            if (response.IsSuccessStatusCode)
+            {
+                var responseContent = await response.Content.ReadAsStringAsync();
+
+                // Exibir retorno no console
+                Console.WriteLine("Retorno da API:");
+                Console.WriteLine(responseContent);
+
+                // Verificar se o retorno é uma lista ou um único objeto
+                if (responseContent.TrimStart().StartsWith("["))
+                {
+                    var itens = JsonConvert.DeserializeObject<List<RetornoOrcamento>>(responseContent);
+                    postagemCompleta.ItensOrcamento = itens;
+                }
+                else
+                {
+                    var itemUnico = JsonConvert.DeserializeObject<RetornoOrcamento>(responseContent);
+                    if (itemUnico != null)
+                    {
+                        postagemCompleta.ItensOrcamento = new List<RetornoOrcamento> { itemUnico };
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine($"Erro na requisição: {response.StatusCode} - {response.ReasonPhrase}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erro ao processar o retorno da API: {ex.Message}");
+        }
+    }
+
+
+
+    private async Task SubmeterFormulario()
+    {
+        var result = await ProtectedSessionStorage.GetAsync<PostagemService1>("Postagem");
+        postagem = result.Value ?? new PostagemService1();
+
+        postagem.IdCliente = idCliente;
+        postagem.IdDepto = idDepto;
+        postagem.Altura = formModel.Altura?.ToString() ?? "0";
+        postagem.Largura = formModel.Largura?.ToString() ?? "0";
+        postagem.Comprimento = formModel.Comprimento?.ToString() ?? "0";
+        postagem.Diametro = formModel.Diametro?.ToString() ?? "0";
+        postagem.Peso = formModel.Peso ?? 0;
+        postagem.AvisoRecebimento = formModel.AvisoRecebimento;
+        postagem.MaoPropria = formModel.MaoPropria;
+        postagem.ProdutoControlado = formModel.ProdutoControlado;
+
+
+        // Enviar para a API e obter retorno
+        await EnviarOrcaWebS(postagem);
+
+        // Salvar o objeto atualizado no ProtectedSessionStorage
+        await ProtectedSessionStorage.SetAsync("Postagem", postagem);
+
+        // Redirecionar
+        NavigationManager.NavigateTo("/Orcamento");
+    }
+
+}

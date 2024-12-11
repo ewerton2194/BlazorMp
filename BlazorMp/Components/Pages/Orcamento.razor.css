@@ -1,0 +1,225 @@
+﻿html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+.header-nav {
+    background-color: #f1f1f1;
+    padding: 2% 2%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Open Sans';
+    color: black;
+    font-size: 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    border-bottom: 1px solid #020202;
+}
+
+    .header-nav .Logo {
+        max-width: 150px;
+        height: auto;
+    }
+
+    .header-nav ul {
+        list-style: none;
+        display: flex;
+        margin: 0;
+        padding: 0;
+        gap: 20px;
+        justify-content: flex-end;
+        flex: 1;
+    }
+
+        .header-nav ul li {
+            display: inline-block;
+        }
+
+            .header-nav ul li a {
+                text-decoration: none;
+                color: black;
+                font-weight: bold;
+                font-size: 16px;
+                text-transform: uppercase;
+            }
+
+.Img-Container {
+    flex-grow: 1;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+}
+
+    .Img-Container img {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: -1;
+    }
+
+    .Img-Container .Title {
+        position: relative;
+        top: 5%;
+        color: white;
+        font-size: 30px;
+        font-family: "arimo";
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+.Card-Container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 colunas */
+    gap: 20px; /* Espaçamento entre os cards */
+    margin-top: 50px;
+    width: 90%;
+    z-index: 1;
+    position: relative;
+}
+
+/* Para telas menores (tablets) */
+@media (max-width: 1024px) {
+    .Card-Container {
+        grid-template-columns: repeat(2, 1fr); /* 2 colunas */
+    }
+}
+
+/* Para telas muito pequenas (celulares) */
+@media (max-width: 768px) {
+    .Card-Container {
+        grid-template-columns: 1fr; /* 1 coluna */
+    }
+}
+
+.Card {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    width: 100%; /* Ajusta a largura dinamicamente */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+    .Card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+.Card-selected {
+    border-color: #007bff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transform: scale(1.05);
+}
+
+/* Estilo para o card desabilitado */
+.Card.disabled {
+    opacity: 0.5; /* Reduz a opacidade do card para indicar que está desabilitado */
+    pointer-events: none; /* Impede qualquer interação com o card */
+}
+
+    /* Estilo para o botão desabilitado */
+    .Card.disabled .Button {
+        opacity: 0.5;
+        cursor: not-allowed; /* Muda o cursor para indicar que o botão está desabilitado */
+    }
+
+.Button.selected {
+    background-color: #28a745;
+    color: white;
+}
+
+.Card h2 {
+    margin-top: 0;
+}
+
+.Card p {
+    margin: 10px 0;
+}
+
+.Button {
+    background-color: #007bff;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+    .Button:hover {
+        background-color: #0056b3;
+    }
+
+.Img-Container .Button {
+    margin-top: 20px;
+    font-size: 20px;
+    background-color: #28a745;
+    color: black;
+    border: none;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+    .Img-Container .Button:hover {
+        background-color: #218838;
+        transform: scale(1.02);
+    }
+
+.Button-Voltar {
+    background-color: #6c757d; /* Cor cinza */
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    text-decoration: none; /* Remove sublinhado em links */
+    display: inline-block;
+    margin: 10px 0; /* Espaçamento ao redor do botão */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Suaviza as transições */
+}
+
+    .Button-Voltar:hover {
+        background-color: #5a6268; /* Tom mais escuro de cinza */
+        transform: scale(1.05); /* Leve aumento ao passar o mouse */
+    }
+
+    .Button-Voltar:active {
+        background-color: #343a40; /* Tom mais escuro ao clicar */
+        transform: scale(0.95); /* Leve redução no tamanho ao clicar */
+    }
+
+/* Responsividade para alinhar o botão */
+.Button-Voltar-container {
+    display: flex;
+    justify-content: flex-start; /* Alinha o botão à esquerda */
+    padding: 10px 20px;
+}
+
+/*.Footer {
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+    font-family: 'Open Sans', sans-serif;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.7);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
+    margin-top: auto;
+}*/

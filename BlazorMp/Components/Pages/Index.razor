@@ -1,0 +1,106 @@
+﻿@page "/Index"
+@rendermode InteractiveServer
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+@inject CepService CepService
+@inject ProtectedSessionStorage ProtectedSessionStorage
+
+<PageTitle>Home</PageTitle>
+
+<header>
+    <nav class="header-nav">
+        <img class="Logo" src="/imagens/logo.png" alt="Alternate Text" />
+        <ul>
+            <li><a href="http://www.centraldeenvios.com.br/Login.aspx"> Home </a></li>
+            <li><a href="http://novo.micropost.com.br/#contato"> Contato</a> </li>
+        </ul>
+    </nav>
+</header>
+
+<div class="Img-Container">
+    <img class="Img-nav" src="/imagens/plano_fundo.png" alt="" />
+
+
+
+    <div class="Form-Card">
+        <p class="Text">Para iniciar seu envio de forma rápida e fácil, digite abaixo o CEP do destino da sua encomenda</p>
+        <EditForm Model="@cep" OnValidSubmit="CepValido">
+            <DataAnnotationsValidator />
+            <div class="Input-Form">
+                <InputText @bind-Value="cep.CepValue" class="Input" placeholder="Digite o CEP (00000-000)" />
+                <ValidationMessage For="@(() => cep.CepValue)" class="validation-message" />
+            </div>
+            <br />
+            <div class="Button-Container">
+                <button class="Button-V" type="button" @onclick="Sair">Sair</button>
+                <button class="Button" type="submit">Continuar</button>
+            </div>
+            <a href="https://buscacepinter.correios.com.br/app/endereco/index.php?t">
+                <p class="Nao-Cep">Não sei meu CEP</p>
+            </a>
+
+
+            @if (!string.IsNullOrEmpty(mensagem))
+            {
+                <p class="validation-message">@mensagem</p>
+            }
+
+        </EditForm>
+
+    </div>
+</div>
+
+<footer class="Footer">
+    <p>Se precisar de ajuda, entre em contato conosco. Central de Envios - Sua solução para envio rápido e seguro!</p>
+</footer>
+
+@code {
+    private Cep cep = new Cep();
+    private EnderecoDTO endereco;
+    private string mensagem;
+
+    [Inject] private NavigationManager Navigation { get; set; }
+
+    public async Task CepValido()
+    {
+        try
+        {
+            // Remove o traço do CEP
+            string cepSemTraco = cep.CepValue.Replace("-", "");
+
+            // Buscar o endereço correspondente ao CEP
+            endereco = await CepService.BuscarEnderecoPorCepAsync(cepSemTraco);
+
+            if (endereco != null)
+            {
+                // Armazena o CEP e o endereço
+                var postagem = new PostagemService1();
+                postagem.CepDestinatario = cepSemTraco;
+                postagem.EnderecoDestinatario = endereco.Logradouro;
+                postagem.BairroDestinatario = endereco.Bairro;
+                postagem.CidadeDestinatario = endereco.Localidade;
+                postagem.ComplementoDestinatario = endereco.Complemento;
+                postagem.UfDestinatario = endereco.Uf;
+
+
+                await ProtectedSessionStorage.SetAsync("Postagem", postagem);
+                //mensagem = "Endereço encontrado com sucesso!";
+                // Redireciona
+                Navigation.NavigateTo("/SelecionaP");
+            }
+            else
+            {
+                mensagem = "Endereço não encontrado para o CEP informado.";
+            }
+        }
+        catch (Exception ex)
+        {
+            mensagem = $"Erro: {ex.Message}";
+        }
+    }
+
+    // Botão de saída
+    public void Sair()
+    {
+        Navigation.NavigateTo("/");
+    }
+}

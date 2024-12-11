@@ -1,0 +1,83 @@
+﻿@page "/Impressaorazor"
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+@inject ProtectedSessionStorage ProtectedSessionStorage
+@using System.Net.Http.Json
+@inject HttpClient HttpClient
+@using System.Text.Json.Serialization
+@using System.Runtime.Serialization.Json
+@using Newtonsoft.Json
+@inject IJSRuntime JSRuntime
+
+<PageTitle>Impressão Etiqueta</PageTitle>
+
+<header>
+    <nav class="header-nav">
+        <img class="Logo" src="/imagens/logo.png" alt="Alternate Text" />
+        <ul>
+            <li><a href="http://www.centraldeenvios.com.br/Login.aspx"> Home </a></li>
+            <li><a href="http://novo.micropost.com.br/#contato"> Contato</a> </li>
+        </ul>
+    </nav>
+</header>
+
+<div class="Img-Container">
+    <img class="Img-nav" src="/imagens/plano_fundo.png" alt="" />
+    <div class="Title">Impressão Etiqueta</div>
+</div>
+
+<!-- Modal com ícone de impressora e opções de impressão -->
+<div class="modal" style="@(showModal ? "display:block" : "display:none")">
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+        <!-- Ícone de impressora -->
+        <div class="modal-header">
+            <i class="fas fa-print" style="font-size: 40px;"></i> <!-- Ícone de impressora -->
+            <h2>Impressão de Etiquetas</h2>
+        </div>
+
+        <p>Imprima sua Etiqueta</p>
+
+        <!-- Botões para impressão -->
+        <div class="modal-buttons">
+            <button class="btn-print" @onclick="PrintAvisoDeRecebimento">
+                Aviso de Recebimento
+            </button>
+            <button class="btn-print" @onclick="PrintDeclaracaoDeConteudo">
+                Declaração de Conteúdo
+            </button>
+        </div>
+    </div>
+</div>
+
+@code {
+    private bool showModal = false;
+
+    // Este método é chamado quando a página é carregada.
+    protected override void OnInitialized()
+    {
+        // Define a variável como 'true' para abrir o modal automaticamente
+        showModal = true;
+    }
+
+    // Método para imprimir o "Aviso de Recebimento"
+    private async Task PrintAvisoDeRecebimento()
+    {
+        // Aqui você pode adicionar o conteúdo específico para o Aviso de Recebimento ou redirecionar para uma impressão específica
+        Console.WriteLine("Imprimindo Aviso de Recebimento...");
+        // Simulação da ação de impressão
+        await JSRuntime.InvokeVoidAsync("window.print");
+    }
+
+    // Método para imprimir a "Declaração de Conteúdo"
+    private async Task PrintDeclaracaoDeConteudo()
+    {
+        // Aqui você pode adicionar o conteúdo específico para a Declaração de Conteúdo ou redirecionar para uma impressão específica
+        Console.WriteLine("Imprimindo Declaração de Conteúdo...");
+        // Simulação da ação de impressão
+        await JSRuntime.InvokeVoidAsync("window.print");
+    }
+}
+
+

@@ -1,0 +1,120 @@
+﻿@page "/Orcamento"
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+@inject NavigationManager NavigationManager
+@inject ProtectedSessionStorage ProtectedSessionStorage
+@rendermode InteractiveServer
+
+<PageTitle>Orçamento</PageTitle>
+
+<header>
+    <nav class="header-nav">
+        <img class="Logo" src="/imagens/logo.png" alt="Logo Central" />
+        <ul>
+            <li><a href="http://www.centraldeenvios.com.br/Login.aspx">Home</a></li>
+            <li><a href="http://novo.micropost.com.br/#contato">Contato</a></li>
+        </ul>
+    </nav>
+</header>
+
+<div class="Img-Container">
+    <img class="Img-nav" src="/imagens/plano_fundo.png" alt="" />
+    <h1 class="Title">Escolha o serviço que melhor se adequa ao seu envio</h1>
+
+    @if (!isLoaded)
+    {
+        <p>Carregando informações do envio...</p>
+    }
+    else if (string.IsNullOrEmpty(errorMessage) && itensOrcamento != null && itensOrcamento.Any())
+    {
+        <div class="Card-Container">
+            @foreach (var orcamento in itensOrcamento)
+            {
+                <div class="Card @(orcamento.observacoes == "PRZ-008: Serviço indisponível para o trecho informado" ? "disabled" : "")" @key="orcamento.codigo">
+                    <h2>@orcamento.servico</h2>
+                    <p><strong>Código:</strong> @orcamento.codigo</p>
+                    <p><strong>Transportadora:</strong> @orcamento.transp</p>
+                    <p><strong>Valor Total:</strong> @orcamento.valorTotal</p>
+                    <p><strong>Prazo de Entrega:</strong> @orcamento.prazo dias</p>
+                    <p><strong>Observações:</strong> @orcamento.observacoes</p>
+                    <button class="Button @(orcamentoSelecionado?.codigo == orcamento.codigo ? "selected" : "")"
+                            @onclick="() => SelecionarOrcamento(orcamento)"
+                            disabled="@(orcamento.observacoes == "PRZ-008: Serviço indisponível para o trecho informado" ? "disabled" : null)">
+                        Selecionar Serviço
+                    </button>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p class="error">@errorMessage</p>
+    }
+</div>
+
+<div class="Button-Voltar-container">
+    <button class="Button-Voltar">
+        <a href="/">Voltar</a>
+    </button>
+</div>
+
+@code {
+    private PostagemService1 postagem = new();
+    private List<RetornoOrcamento> itensOrcamento = new();
+    private RetornoOrcamento orcamentoSelecionado;
+    private bool isLoaded = false;
+    private string errorMessage;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            try
+            {
+                // Carregar os dados de PostagemService1
+                var result = await ProtectedSessionStorage.GetAsync<PostagemService1>("Postagem");
+                if (result.Success && result.Value != null)
+                {
+                    postagem = result.Value;
+                    itensOrcamento = postagem.ItensOrcamento ?? new List<RetornoOrcamento>();
+                }
+                else
+                {
+                    errorMessage = "Erro ao carregar os dados do orçamento.";
+                }
+            }
+            catch (Exception ex)
+            {
+                errorMessage = $"Erro ao inicializar: {ex.Message}";
+            }
+            finally
+            {
+                isLoaded = true;
+                StateHasChanged(); // Atualiza a interface após carregar os dados
+            }
+        }
+    }
+
+    private async Task SelecionarOrcamento(RetornoOrcamento orcamento)
+    {
+        orcamentoSelecionado = orcamento;
+
+        try
+        {
+            // Atualizar postagem com informações do orçamento selecionado
+            postagem.CodigoServico = orcamento.codigo;
+            postagem.DescricaoServico = orcamento.servico;
+            postagem.Valor = decimal.TryParse(orcamento.valorTotal, out var valorTotal) ? valorTotal : 0;
+            postagem.PrazoEntrega = orcamento.prazo;
+
+            // Salvar a postagem atualizada no ProtectedSessionStorage
+            await ProtectedSessionStorage.SetAsync("Postagem", postagem);
+
+            // Navegar para a próxima página
+            NavigationManager.NavigateTo($"/EnderecoRemetente{orcamentoSelecionado.codigo}");
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Erro ao selecionar o orçamento: {ex.Message}";
+        }
+    }
+}

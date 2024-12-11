@@ -1,0 +1,314 @@
+﻿html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.header-nav {
+    background-color: #f1f1f1;
+    padding: 2%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Open Sans';
+    color: black;
+    font-size: 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    border-bottom: 1px solid #020202;
+}
+
+    .header-nav .Logo {
+        max-width: 150px;
+        height: auto;
+    }
+
+    .header-nav ul {
+        list-style: none;
+        display: flex;
+        margin: 0;
+        padding: 0;
+        gap: 20px;
+        justify-content: flex-end;
+        flex: 1;
+    }
+
+        .header-nav ul li {
+            display: inline-block;
+        }
+
+            .header-nav ul li a {
+                text-decoration: none;
+                color: black;
+                font-weight: bold;
+                font-size: 16px;
+                text-transform: uppercase;
+            }
+
+.Img-Container {
+    position: relative;
+    width: 100%;
+    min-height: 100vh; /* Garante que a altura mínima é a altura da janela */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* Centraliza verticalmente */
+    overflow: hidden;
+}
+
+    .Img-Container img {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: -1;
+    }
+
+    .Img-Container .Title {
+        position: relative;
+        top: 5%;
+        color: white;
+        font-size: 30px;
+        font-family: "arimo";
+        font-weight: bold;
+        text-transform: uppercase;
+        margin-bottom: 40px;
+    }
+
+.Card {
+    z-index: 1;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 950px;
+    width: 90%;
+    margin: 20px auto; /* Evita corte em resoluções menores */
+    color: white;
+    overflow-y: auto; /* Permite scroll caso o conteúdo ultrapasse o limite */
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.form-container {
+    max-width: 900px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-group-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+    .form-group-row .form-group {
+        flex: 1;
+    }
+
+.Button-Container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.Button-V {
+    width: 48%;
+    padding: 12px;
+    background-color: #6c757d;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.Button {
+    width: 48%;
+    padding: 12px;
+    background-color: #28a745;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+    .Button:hover {
+        background-color: #218838;
+    }
+
+.Button-V:hover {
+    background-color: #5a6268;
+}
+
+input[type="text"],
+input[type="email"] {
+    width: 100%;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1.5em;
+}
+
+/* Responsividade */
+@media (max-width: 1024px) {
+    .header-nav {
+        padding: 1.5%;
+        font-size: 18px;
+    }
+
+        .header-nav ul li a {
+            font-size: 14px;
+        }
+
+    .Img-Container .Title {
+        font-size: 24px;
+        top: 10%;
+    }
+
+    .Card {
+        width: 95%;
+        padding: 15px;
+        margin: 30px 0; /* Adiciona espaço em cima e embaixo */
+    }
+
+    .form-container {
+        width: 100%;
+        margin: 20px auto;
+    }
+
+    .form-group-row {
+        flex-direction: column;
+    }
+
+    .Button-Container {
+        display: flex; /* Torna-os lado a lado */
+        justify-content: space-between; /* Espaço igual entre os botões */
+        gap: 10px; /* Espaçamento entre os botões */
+        width: 100%;
+    }
+
+    .Button-V,
+    .Button {
+        flex: 1; /* Faz com que os botões compartilhem espaço igualmente */
+        padding: 12px;
+        border: none;
+        border-radius: 5px;
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .Button {
+        background-color: #28a745;
+    }
+
+    .Button-V {
+        background-color: #6c757d;
+    }
+
+    .Button:hover {
+        background-color: #218838;
+    }
+
+    .Button-V:hover {
+        background-color: #5a6268;
+    }
+}
+
+@media (max-width: 768px) {
+    .header-nav {
+        padding: 1% 0.5%;
+        font-size: 16px;
+    }
+
+    .Img-Container .Title {
+        font-size: 20px;
+        top: 15%;
+    }
+
+    .Card {
+        width: 90%;
+        padding: 10px;
+    }
+
+    .form-container {
+        padding: 15px;
+    }
+
+    .Button-Container {
+        flex-direction: row;
+        gap: 8px;
+    }
+
+    .Button-V,
+    .Button {
+        width: 100%;
+        padding: 10px;
+    }
+
+    input[type="text"],
+    input[type="email"] {
+        font-size: 1.2em;
+        padding: 16px;
+    }
+}
+
+@media (max-width: 576px) {
+    .header-nav {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1%;
+        font-size: 14px;
+    }
+
+        .header-nav ul {
+            flex-direction: column;
+            gap: 10px;
+        }
+
+    .Img-Container .Title {
+        font-size: 18px;
+        top: 20%;
+    }
+
+    .Card {
+        width: 95%;
+        padding: 10px;
+    }
+
+    .form-container {
+        padding: 10px;
+    }
+
+    .Button-Container {
+        gap: 8px;
+    }
+
+    .Button-V,
+    .Button {
+        padding: 8px;
+    }
+
+    input[type="text"],
+    input[type="email"] {
+        font-size: 1em;
+        padding: 12px;
+    }
+}

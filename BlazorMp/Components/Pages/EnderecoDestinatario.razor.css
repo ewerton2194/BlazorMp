@@ -1,0 +1,305 @@
+﻿html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden; /* Evitar barra de rolagem horizontal */
+    font-size: 16px; /* Ajustar o tamanho base para uso com rem */
+}
+
+.header-nav {
+    background-color: #f1f1f1;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Open Sans';
+    color: black;
+    font-size: 1.25rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.2rem;
+    border-bottom: 1px solid #020202;
+    width: 100%; /* Garantir que ocupe a largura total */
+}
+
+    .header-nav .Logo {
+        max-width: 9.375rem; /* 150px */
+        height: auto;
+    }
+
+    .header-nav ul {
+        list-style: none;
+        display: flex;
+        margin: 0;
+        padding: 0;
+        gap: 1.25rem; /* 20px */
+        justify-content: flex-end;
+        flex: 1;
+    }
+
+        .header-nav ul li {
+            display: inline-block;
+        }
+
+            .header-nav ul li a {
+                text-decoration: none;
+                color: black;
+                font-weight: bold;
+                font-size: 1rem;
+                text-transform: uppercase;
+            }
+
+.Img-Container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+}
+
+    .Img-Container img {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: -1;
+    }
+
+    .Img-Container .Title {
+        position: relative;
+        top: 5%;
+        color: white;
+        font-size: 2rem;
+        font-family: "arimo";
+        font-weight: bold;
+        text-transform: uppercase;
+        margin-bottom: 2.5rem; /* 40px */
+        text-align: center;
+        padding: 0 0.625rem; /* 10px */
+    }
+
+.Card {
+    z-index: 1;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 1.25rem; /* 20px */
+    border-radius: 0.625rem; /* 10px */
+    max-width: 59.375rem; /* 950px */
+    width: 95%; /* Evitar que a largura ultrapasse 100% */
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem; /* 15px */
+}
+
+.form-container {
+    max-width: 56.25rem; /* 900px */
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 1.25rem; /* 20px */
+    border-radius: 0.5rem; /* 8px */
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+    margin: 2.5rem auto 0 auto; /* 40px */
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 1.25rem; /* 20px */
+}
+
+    .form-group-row .form-group {
+        flex: 1;
+    }
+
+input[type="text"],
+input[type="email"] {
+    width: 100%;
+    padding: 20px; /* Aumenta o espaço interno dos inputs */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 26px; /* Mantém o tamanho da fonte grande */
+    font-size: 1.5em; /* Confere uma boa legibilidade */
+}
+
+.Button-Container {
+    display: flex;
+    justify-content: space-between; /* Botões nas extremidades opostas */
+    width: 100%; /* Preenche toda a largura do formulário */
+}
+
+.Button-V {
+    width: 48%;
+    padding: 0.75rem; /* 12px */
+    background-color: #6c757d;
+    border: none;
+    border-radius: 0.3125rem; /* 5px */
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.Button {
+    width: 48%;
+    padding: 0.75rem; /* 12px */
+    background-color: #28a745;
+    border: none;
+    border-radius: 0.3125rem; /* 5px */
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+    .Button:hover {
+        background-color: #218838;
+    }
+
+.Button-V:hover {
+    background-color: #5a6268;
+}
+
+/* Estilos Responsivos */
+@media (max-width: 1024px) {
+    .header-nav {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+        .header-nav ul {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .header-nav .Logo {
+            margin-bottom: 0.625rem; /* 10px */
+        }
+
+    .Img-Container .Title {
+        font-size: 1.8rem;
+    }
+
+    .Card {
+        max-width: 43.75rem; /* 700px */
+        padding: 0.9375rem; /* 15px */
+    }
+
+    .form-container {
+        max-width: 43.75rem; /* 700px */
+        padding: 0.9375rem; /* 15px */
+    }
+
+    .form-group-row {
+        gap: 0.9375rem; /* 15px */
+    }
+
+    .Button-Container {
+        flex-direction: column;
+        gap: 0.625rem; /* 10px */
+    }
+}
+
+@media (max-width: 768px) {
+    .form-group-row {
+        flex-direction: column; /* Alinha os campos verticalmente */
+    }
+
+    .Button-Container {
+        flex-direction: row; /* Alinha os botões lado a lado */
+        justify-content: space-between; /* Adiciona espaçamento entre eles */
+        gap: 0.625rem; /* 10px - Espaço entre os botões */
+        width: 100%; /* Garante que ocupe a largura total */
+    }
+
+    .Button, .Button-V {
+        width: 48%; /* Cada botão ocupa 48% da largura */
+    }
+
+    .Card {
+        max-width: 37.5rem; /* 600px */
+        width: 90%; /* Ocupa 90% da largura da tela */
+        height: auto; /* Ajusta a altura ao conteúdo */
+        max-height: calc(100vh - 2rem); /* Limita a altura do card à tela com margem */
+        overflow-y: auto; /* Adiciona scroll vertical caso o conteúdo exceda a altura */
+        padding: 1.25rem; /* 20px */
+        box-sizing: border-box; /* Inclui padding no cálculo do tamanho */
+    }
+
+    .Img-Container {
+        padding: 1rem; /* Garante espaçamento interno ao redor do conteúdo */
+    }
+
+        .Img-Container .Title {
+            font-size: 1.6rem; /* Reduz o tamanho do título */
+        }
+
+    .form-container {
+        max-width: 37.5rem; /* 600px */
+        padding: 0.9375rem; /* 15px */
+    }
+}
+
+@media (max-width: 480px) {
+    .header-nav {
+        padding: 1% 2%;
+    }
+
+        .header-nav ul {
+            gap: 0.625rem; /* 10px */
+        }
+
+    .Img-Container .Title {
+        font-size: 1.4rem;
+    }
+
+    .Card {
+        max-width: 100%;
+        width: 90%;
+    }
+
+    input[type="text"],
+    input[type="email"] {
+        padding: 0.625rem; /* 10px */
+        font-size: 0.875rem; /* 14px */
+    }
+
+    .form-container {
+        max-width: 100%;
+        padding: 0.625rem; /* 10px */
+        margin: 1.25rem auto; /* 20px */
+    }
+
+    .form-group-row {
+        flex-direction: column;
+        gap: 0.625rem; /* 10px */
+    }
+
+    .Button-Container {
+        flex-direction: column;
+        gap: 0.625rem; /* 10px */
+    }
+
+    button {
+        padding: 0.625rem; /* 10px */
+        font-size: 0.875rem; /* 14px */
+    }
+}

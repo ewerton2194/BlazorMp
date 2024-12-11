@@ -1,0 +1,251 @@
+﻿html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.Img-Container {
+    position: relative;
+    width: 100%;
+    min-height: 100vh; /* Garante que a imagem de fundo ocupe toda a altura da tela */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+    .Img-Container img {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: -1;
+    }
+
+    .Img-Container .Title {
+        color: white;
+        font-size: 30px;
+        font-family: "Open Sans", sans-serif;
+        font-weight: bold;
+        text-transform: uppercase;
+        z-index: 1;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .Img-Container .Form {
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+        max-width: 400px;
+        padding: 20px;
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 10px;
+        color: white;
+    }
+
+.Esq_login {
+    color: white;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.Img-Container .Button {
+    width: 100%;
+    padding: 12px;
+    background-color: #28a745;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 10px;
+}
+
+    .Img-Container .Button:hover {
+        background-color: #218838;
+        transform: scale(1.02);
+    }
+
+    .Img-Container .Button:active {
+        background-color: #1e7e34;
+        transform: scale(0.98);
+    }
+
+/* Ajuste do footer para o final da página sem sobrepor o card */
+.Footer {
+    position: relative;
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+    font-family: 'Open Sans';
+    color: white;
+    font-size: 12px;
+    background-color: rgba(0, 0, 0, 0.7); /* Rodapé semitransparente */
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-top: none;
+    box-sizing: border-box;
+    margin-top: auto; /* Para empurrar o rodapé para o final da página */
+}
+
+html, body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.Img-Container {
+    flex: 1;
+}
+
+/* Alinhar a lista de navegação à esquerda */
+.header-nav {
+    background-color: #f1f1f1;
+    padding: 2% 2%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Open Sans';
+    color: black;
+    font-size: 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    border-bottom: 1px solid #020202;
+}
+
+    .header-nav .Logo {
+        max-width: 150px;
+        height: auto;
+    }
+
+    .header-nav ul {
+        list-style: none;
+        display: flex;
+        margin: 0;
+        padding: 0;
+        gap: 20px;
+        justify-content: flex-end;
+        flex: 1; /* Para garantir que a lista ocupe o espaço necessário */
+    }
+
+        .header-nav ul li {
+            display: inline-block;
+        }
+
+            .header-nav ul li a {
+                text-decoration: none;
+                color: black;
+                font-weight: bold;
+                font-size: 16px;
+                text-transform: uppercase;
+            }
+
+/* Responsividade para tablets */
+@media (max-width: 1024px) {
+    .header-nav {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .header-nav ul {
+        flex-direction: column;
+        gap: 10px;
+        justify-content: center; /* Centraliza a lista em telas menores */
+    }
+
+    .header-nav .Logo {
+        margin-bottom: 15px;
+    }
+
+    .Img-Container .Title {
+        font-size: 24px;
+    }
+
+    .Footer {
+        font-size: 10px;
+        padding: 15px;
+    }
+
+    .Img-Container .Form {
+        max-width: 300px;
+    }
+}
+
+/* Responsividade para celulares */
+@media (max-width: 768px) {
+    .header-nav {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .header-nav ul {
+        flex-direction: column;
+        gap: 10px;
+        justify-content: center; /* Centraliza a lista em telas menores */
+    }
+
+    .header-nav .Logo {
+        margin-bottom: 15px;
+    }
+
+    .Img-Container .Title {
+        font-size: 20px;
+    }
+
+    .Footer {
+        font-size: 8px; /* Ajuste do tamanho da fonte para telas menores */
+        padding: 10px; /* Ajuste do padding para telas menores */
+    }
+
+    .Img-Container .Form {
+        max-width: 250px;
+    }
+}
+
+/* Responsividade para monitores grandes */
+@media (min-width: 1025px) {
+    .header-nav {
+        flex-direction: row;
+        text-align: left;
+    }
+
+    .header-nav ul {
+        flex-direction: row;
+        gap: 20px;
+        justify-content: flex-end;
+    }
+
+    .header-nav .Logo {
+        margin-bottom: 0;
+    }
+
+    .Img-Container .Title {
+        font-size: 30px;
+    }
+
+    .Footer {
+        font-size: 12px;
+        padding: 20px;
+    }
+
+    .Img-Container .Form {
+        max-width: 400px;
+    }
+}
